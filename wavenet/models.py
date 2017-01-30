@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-from layers import (_causal_linear, _output_linear, conv1d,
+from wavenet.layers import (_causal_linear, _output_linear, conv1d,
                     dilated_conv1d)
 
 
@@ -14,7 +14,7 @@ class Model(object):
                  num_layers=14,
                  num_hidden=128,
                  gpu_fraction=1.0):
-        
+
         self.num_time_samples = num_time_samples
         self.num_channels = num_channels
         self.num_classes = num_classes
@@ -22,7 +22,7 @@ class Model(object):
         self.num_layers = num_layers
         self.num_hidden = num_hidden
         self.gpu_fraction = gpu_fraction
-        
+
         inputs = tf.placeholder(tf.float32,
                                 shape=(None, num_time_samples, num_channels))
         targets = tf.placeholder(tf.int32, shape=(None, num_time_samples))
@@ -108,7 +108,7 @@ class Generator(object):
                     state_size = 1
                 else:
                     state_size = self.model.num_hidden
-                    
+
                 q = tf.FIFOQueue(rate,
                                  dtypes=tf.float32,
                                  shapes=(batch_size, state_size))
@@ -130,7 +130,7 @@ class Generator(object):
         self.inputs = inputs
         self.init_ops = init_ops
         self.out_ops = out_ops
-        
+
         # Initialize queues.
         self.model.sess.run(self.init_ops)
 
